@@ -8,6 +8,8 @@
         @include('components.navigation')
 
         <main class="mt-5 mb-5">
+            @include('components.errors')
+            @include('components.status')
             @yield('content')
         </main>
 

@@ -26,10 +26,12 @@ class PostsController extends Controller
             'body' => 'required|string|min:10|max:5000'
         ]);
 
-        Post::create([
+        $post = Post::create([
             'title' => $request->title,
-            'body' => $request->body
+            'body' => $request->body,
+            'user_id' => auth()->user()->id
         ]);
+
 
         return redirect('createpost')->with('status', 'Post successfully created.');
     }
@@ -61,6 +63,6 @@ class PostsController extends Controller
 
     public function createPost()
     {
-        return view('pages.createpost');
+        return view('pages.auth.createpost');
     }
 }
