@@ -56,7 +56,7 @@ class PostsController extends Controller
             'title' => $request->title,
             'body' => $request->body
         ]);
-        return redirect()->back()->with('status', 'Edited post');
+        return redirect()->back()->with('status', 'Post edited successfully!');
     }
 
     /**
@@ -64,7 +64,8 @@ class PostsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Post::findOrFail($id)->delete();
+        return redirect('/posts')->with('status', 'Post deleted successfully!');
     }
 
     public function createPost()
