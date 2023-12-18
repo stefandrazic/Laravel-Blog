@@ -13,7 +13,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::where('isPublished', true)->get();
+        $posts = Post::paginate(3);
         return view('pages.posts', compact('posts'));
     }
 

@@ -1,6 +1,5 @@
 @extends('layout.default')
 
-
 @section('title')
     Posts
 @endsection
@@ -11,4 +10,5 @@
             @include('components.postcard')
         @endforeach
     </div>
+    {{ $posts }}
 @endsection
