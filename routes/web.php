@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ Route::get('/', function () {
 
 Route::resource('/auth', 'App\Http\Controllers\AuthController');
 Route::resource('/posts', 'App\Http\Controllers\PostsController');
+Route::resource('/comments', CommentsController::class);
 
 Route::middleware('notauthenticated')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin']);
