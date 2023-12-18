@@ -52,7 +52,11 @@ class PostsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        Post::findOrFail($id)->update([
+            'title' => $request->title,
+            'body' => $request->body
+        ]);
+        return redirect()->back()->with('status', 'Edited post');
     }
 
     /**

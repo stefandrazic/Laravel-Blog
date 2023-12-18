@@ -42,7 +42,8 @@ class CommentsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        Comment::findOrFail($id)->update(['body' => $request->input('body')]);
+        return redirect()->back()->with('status', 'Successfully edited comment!');
     }
 
     /**
@@ -50,7 +51,7 @@ class CommentsController extends Controller
      */
     public function destroy(string $id)
     {
-        Comment::where('id', $id)->delete();
+        Comment::where('id', $id)->first()->delete();
         return redirect()->back()->with('status', 'Successfully deleted comment!');
     }
 }
