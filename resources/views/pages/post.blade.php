@@ -8,6 +8,9 @@
     <h1>{{ $post->title }}</h1>
     <h5>Author: {{ $post->user->name }}</h5>
     <p>{{ $post->body }}</p>
+    @foreach ($post->tags as $tag)
+        <a href="/tags/{{ $tag->title }}"><span class="badge rounded-pill text-bg-info">{{ $tag->title }}</span></a>
+    @endforeach
     @if (auth()->user() && auth()->user()->id === $post->user_id)
         <form action="{{ url('posts/' . $post->id) }}" method="POST" class="mb-1">
             @csrf

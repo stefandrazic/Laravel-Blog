@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\TagsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,7 @@ Route::get('/', function () {
 Route::resource('/auth', 'App\Http\Controllers\AuthController');
 Route::resource('/posts', 'App\Http\Controllers\PostsController');
 Route::resource('/comments', 'App\Http\Controllers\CommentsController');
+Route::resource('/tags', 'App\Http\Controllers\TagsController');
 
 Route::middleware('notauthenticated')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin']);

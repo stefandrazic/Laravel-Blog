@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -32,8 +33,7 @@ class PostsController extends Controller
             'body' => $request->body,
             'user_id' => auth()->user()->id
         ]);
-
-
+        $post->tags()->attach($request->tags);
         return redirect('createpost')->with('status', 'Post successfully created.');
     }
 
@@ -52,7 +52,7 @@ class PostsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        Post::findOrFail($id)->update([
+        $post = Post::findOrFail($id)->update([
             'title' => $request->title,
             'body' => $request->body
         ]);
@@ -70,6 +70,7 @@ class PostsController extends Controller
 
     public function createPost()
     {
-        return view('pages.auth.createpost');
+        $tags = Tag::all();
+        return view('pages.auth.createpost', compact('tags'));
     }
 }
