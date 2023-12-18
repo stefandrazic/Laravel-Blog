@@ -27,9 +27,16 @@
                         </li>
                     @endif
                     <li class="nav-item">
+                        <a class="nav-link" href="/changepassword">Change password</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/logout">Logout</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{{ auth()->user()->name }}</a>
+                    </li>
                 @endif
+            </ul>
         </div>
     </div>
 </nav>

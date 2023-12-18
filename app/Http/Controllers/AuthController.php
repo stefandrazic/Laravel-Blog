@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
@@ -23,11 +24,15 @@ class AuthController extends Controller
 
     public function store(RegisterRequest $request)
     {
-        User::create([
+        $user = User::create([
             "email" => $request->email,
             "name" => $request->name,
             "password" => Hash::make($request->password),
         ]);
+        if ($user->id === 1) {
+            $user->isAdmin = true;
+            $user->save();
+        }
         return redirect('/')->with('status', 'Succesfull registration!');
     }
 
@@ -50,5 +55,23 @@ class AuthController extends Controller
         Auth::logout();
 
         return redirect('/')->with('status', 'Logged out!');
+    }
+
+    public function showChangePassword()
+    {
+        return view('pages.auth.changepassword');
+    }
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $user = User::find(Auth::id());
+        if (Hash::check($request->oldPassword, $user->password)) {
+            if (Hash::check($request->password, $user->password)) {
+                return redirect()->back()->withErrors('New password can not be the same as old password!');
+            }
+            $user->password = Hash::make($request->password);
+            $user->save();
+            return redirect('/')->with('status', 'Password changed successfully!');
+        }
+        return redirect()->back()->withErrors('Wrong password!');
     }
 }

@@ -3,18 +3,13 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
-class LoginRequest extends FormRequest
+class ChangePasswordRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
-    {
-        if (!Auth::check()) return true;
-        return false;
-    }
+
 
     /**
      * Get the validation rules that apply to the request.
@@ -24,8 +19,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "email" => "exists:users,email|required|email",
-            "password" => "string|min:4",
+            "oldPassword" => "string|min:4",
+            "password" => "string|min:4|confirmed",
         ];
     }
 }

@@ -32,4 +32,6 @@ Route::middleware('notauthenticated')->group(function () {
 Route::middleware('authenticated')->group(function () {
     Route::get('/createpost', [PostsController::class, 'createPost']);
     Route::get('logout', [AuthController::class, 'destroy']);
+    Route::get('/changepassword', [AuthController::class, 'showChangePassword']);
+    Route::post('/changepassword', [AuthController::class, 'changePassword']);
 });
