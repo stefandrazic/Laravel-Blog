@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CreatePostMail;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class PostsController extends Controller
 {
@@ -34,6 +37,9 @@ class PostsController extends Controller
             'user_id' => auth()->user()->id
         ]);
         $post->tags()->attach($request->tags);
+        $userEmail = Auth::user()->email;
+        $mailData = $post->only('title', 'body');
+        Mail::to($userEmail)->send(new CreatePostMail($mailData));
         return redirect('createpost')->with('status', 'Post successfully created.');
     }
 
