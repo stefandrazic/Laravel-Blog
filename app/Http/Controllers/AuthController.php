@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Mail\VerifyUserMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -31,23 +34,36 @@ class AuthController extends Controller
         ]);
         if ($user->id === 1) {
             $user->isAdmin = true;
-            $user->save();
         }
+        $user->verify_string = Str::uuid()->toString();
+        $user->save();
+        $mailData = $user->only('email', 'verify_string');
+        Mail::to($user->email)->send(new VerifyUserMail($mailData));
+
         return redirect('/')->with('status', 'Succesfull registration!');
     }
 
     public function index(LoginRequest $request)
     {
+
+
         if (Auth::check()) {
             return redirect('/')->withErrors('You are already logged in!');
         }
 
         $credentials = $request->only('email', 'password');
         if (!Auth::attempt($credentials)) {
+
             return redirect('/login')->withErrors('Invalid credentials');
         }
 
-        return redirect('/')->with('status', 'Succesfull login!');
+        $user = Auth::user();
+        if (!$user->email_verified_at) {
+            Session::flush();
+            Auth::logout();
+            return redirect('/login')->with('status', 'Not verified!');
+        }
+        return redirect('/')->with('status', 'Successfully loged in!');
     }
     public function destroy()
     {
@@ -73,5 +89,15 @@ class AuthController extends Controller
             return redirect('/')->with('status', 'Password changed successfully!');
         }
         return redirect()->back()->withErrors('Wrong password!');
+    }
+
+    public function verify(string $string)
+    {
+        $user = User::where('verify_string', $string)->first();
+        if (!$user->email_verified_at) {
+            $user->email_verified_at = now();
+            $user->save();
+        }
+        return redirect('/login')->with('status', 'Succesfully verified');
     }
 }

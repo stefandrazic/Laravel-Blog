@@ -29,6 +29,7 @@ Route::resource('/tags', 'App\Http\Controllers\TagsController');
 Route::middleware('notauthenticated')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin']);
     Route::get('/register', [AuthController::class, 'showRegister']);
+    Route::get('/verify/{verify_string}', [AuthController::class, 'verify']);
 });
 
 Route::middleware('authenticated')->group(function () {
