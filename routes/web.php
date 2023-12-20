@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LikesController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\TagsController;
 use Illuminate\Support\Facades\Route;
@@ -37,4 +38,5 @@ Route::middleware('authenticated')->group(function () {
     Route::get('logout', [AuthController::class, 'destroy']);
     Route::get('/changepassword', [AuthController::class, 'showChangePassword']);
     Route::post('/changepassword', [AuthController::class, 'changePassword']);
+    Route::get('/like/{post_id}/{type}', [LikesController::class, 'like']);
 });

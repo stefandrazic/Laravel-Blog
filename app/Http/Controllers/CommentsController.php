@@ -34,13 +34,12 @@ class CommentsController extends Controller
         $mailData = $comment->only('body', 'id');
 
 
-        $comments = Comment::where('post_id', $request->input('post_id'))->get();
-        $emails = [];
-        foreach ($comments as $comment) {
-            if (!in_array($comment->user->email, $emails)) {
-                $emails[] = $comment->user->email;
-            }
-        }
+        $emails = Comment::where('post_id', $request->input('post_id'))
+            ->with('user')
+            ->get()
+            ->pluck('user.email')
+            ->unique()
+            ->toArray();
         $user = $comment->user->only('name');
         // dd($user);
 

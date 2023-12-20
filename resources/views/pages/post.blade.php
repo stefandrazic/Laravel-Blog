@@ -12,6 +12,11 @@
             <a href="/tags/{{ $tag->title }}"><span class="badge rounded-pill text-bg-info">{{ $tag->title }}</span></a>
         @endforeach
     </h6>
+    <h6>Likes: {{ $likes }}</h6>
+    <h6>Dislikes: {{ $dislikes }}</h6>
+    @if (auth()->user())
+        @include('components.like-dislike')
+    @endif
     @if (auth()->user() && auth()->user()->id === $post->user_id)
         <form action="{{ url('posts/' . $post->id) }}" method="POST" class="mb-1">
             @csrf

@@ -38,7 +38,7 @@ class PostsController extends Controller
         ]);
         $post->tags()->attach($request->tags);
         $userEmail = Auth::user()->email;
-        $mailData = $post->only('title', 'body');
+        $mailData = $post->only('title', 'body', 'id');
         Mail::to($userEmail)->send(new CreatePostMail($mailData));
         return redirect('createpost')->with('status', 'Post successfully created.');
     }
@@ -50,7 +50,9 @@ class PostsController extends Controller
     {
         $post = Post::findOrFail($id);
         $comments = Comment::where('post_id', $id)->get();
-        return view('pages.post', compact('post', 'comments'));
+        $likes = $post->likes()->where('type', 'like')->count();
+        $dislikes = $post->likes()->where('type', 'dislike')->count();
+        return view('pages.post', compact('post', 'comments', 'likes', 'dislikes'));
     }
 
     /**

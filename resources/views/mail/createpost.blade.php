@@ -12,6 +12,7 @@
     <h1>New Post has been created</h1>
     <h2>{{ $mailData['title'] }}</h2>
     <p>{{ $mailData['body'] }}</p>
+    <a href="http://127.0.0.1:8000/posts/{{ $mailData['id'] }}">Poseti post</a>
 </body>
 
 </html>
